@@ -15,36 +15,35 @@ export class Images {
     headers: {
       'Content-Type': 'application/json',
     },
-};
+    };
 
-fatchImages() {
-    return axios
-        .get(`${this.#BASE_URL}`, this.#options)
-        .then(({ data }) => {
+    async fetchImages() {
+        try {
+        const { data } = await axios.get(this.#BASE_URL, { params: this.#options.params });
             return data;
-        })
-        .catch(err => {
-            console.log(err);
-        });
+        } catch (error) {
+            console.log(error);
+            return [];
+        }
+    }
+
+        incrementPage() {
+            this.#options.params.page += 1;
+    }
+
+        setFirstPage() {
+            this.#options.params.page = 1;
+    }
+
+        getPageNumber() {
+            return this.#options.params.page;
+    }
+
+        setValue(value) {
+            this.#options.params.q = value;}
+
+        getValue() {
+            return this.#options.params.q;
+    }
 }
 
-incrementPage() {
-    this.#options.params.page += 1;
-    }
-
-    setFistPage() {
-    this.#options.params.page = 1;
-    }
-
-    getPageNumber() {
-        return this.#options.params.page;
-    }
-
-    setValue(value) {
-        this.#options.params.q = value;
-    }
-
-    getvalue() {
-        return this.#options.params.q;
-    }
-}

@@ -3,7 +3,6 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import getColletion from './js/getCollectiojn';
 import { Images } from './js/fatchImages.js';
-import throttle from 'lodash.throttle';
 import { renderGallery } from './js/createMarkup';
 
 
@@ -13,9 +12,21 @@ const refs = getColletion();
 
 refs.form.addEventListener('submit', handleSubmitForm);
 refs.imgList.addEventListener('click', handleClickImage);
-window.addEventListener('scroll', throttle(checkPosition, 300));
+refs.loadMoreBtn.addEventListener('click', () => {
+    images.incrementPage();
+    getMoreImages();
+});
 
-const lightbox = new SimpleLightbox('.gallery a', {});
+
+
+const lightbox = new SimpleLightbox('.gallery a', {
+    captionSelector: 'img',
+    captionsData: 'alt',
+    captionDelay: 250,
+    preload: false,
+});
+
+
 
 Notify.init({
     width: '300px',
@@ -30,11 +41,10 @@ Notify.init({
 
 
 
-
 function handleSubmitForm(e) {
     e.preventDefault();
 
-    images.setFistPage();
+    images.setFirstPage();
     const query = e.target.elements.searchQuery.value.trim();
     console.log(query);
     if (!query) {
@@ -48,12 +58,13 @@ function handleSubmitForm(e) {
 
 function fatchImages() {
   images
-    .fatchImages()
+    .fetchImages()
     .then(data => {
       if (data.hits.length === 0) {
         Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
         );
+        refs.imgList.innerHTML = '';
         return;
       }
       renderHTML(data.hits);
@@ -70,32 +81,33 @@ function fatchImages() {
     });
 }
 
-function renderHTML(data) {
-refs.imgList.innerHTML = renderGallery(data)
-}
 
-function checkPosition() {
-  const height = document.body.offsetHeight;
-  const screenHeight = window.innerHeight;
-  const scrolled = window.scrollY;
-
-  const threshold = height - screenHeight / 4;
-  const position = scrolled + screenHeight;
-
-  if (position >= threshold) {
-    fatchImages();
-    smoothScroll();
+function handleClickImage(e) {
+  if (e.target.nodeName === 'IMG') {
+    lightbox.on('show.simplelightbox');
   }
 }
 
+function renderHTML(data, append = false) {
+    refs.imgList.innerHTML = ''
+    const imgGallety = renderGallery(data);
+    if(append){
+      refs.imgList.insertAdjacentHTML('beforeend', imgGallety)
+    } else {
+      refs.imgList.innerHTML = imgGallety
+    }
+}
 
-const smoothScroll = () => {
-  const { height: cardHeight } = document
-    .querySelector('.gallery-all')
-    .firstElementChild.getBoundingClientRect();
-
-  window.scrollBy({
-    top: cardHeight * 2,
-    behavior: 'smooth',
-  });
-};
+async function getMoreImages() {
+  try {
+    images.incrementPage();
+    const data = await images.fetchImages();
+    if (data.hits.length > 0) {
+      renderHTML(data.hits, true);
+    } else {
+      console.log('No more images');
+    }
+  } catch (error) {
+    console.error('Error fetching images:', error);
+  }
+}

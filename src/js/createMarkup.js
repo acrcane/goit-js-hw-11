@@ -41,4 +41,5 @@ export function renderGallery(images) {
     }).join('');
 
   gallery.insertAdjacentHTML('beforeend', cardsMarkup);
+// gallery.innerHTML = cardsMarkup
 }
