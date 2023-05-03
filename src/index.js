@@ -35,6 +35,7 @@ async function handleSubmitForm(e) {
         const query = e.target.elements.searchQuery.value.trim();
         images.q = query;
         console.log(query);
+        e.target.elements.searchQuery.value = ''
 
         if (!query) {
           Notify.info('Fill the form for searching');
