@@ -2,25 +2,20 @@ import axios from 'axios';
 
 export class Images {
   #BASE_URL = 'https://pixabay.com/api/';
-  #options = {
-        params: {
-            key: '35867052-4bc95a3fa2f6c2b76177d40b9',
-            q: null,
-            image_type: 'photo',
-            orientation: 'horizontal',
-            safesearch: true,
-            page: 1,
-            per_page: 40,
-    },
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    };
+  #KEY = "35867052-4bc95a3fa2f6c2b76177d40b9";
+  #Q = ''
+
+    constructor() {
+        this.perPage = 40;
+        this.currentPage = 1;
+    }
 
     async fetchImages() {
+        const url = `${this.#BASE_URL}?key=${this.#KEY}&q=${this.#Q}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${this.perPage}
+        &page=${this.currentPage}`
         try {
-        const { data } = await axios.get(this.#BASE_URL, { params: this.#options.params });
-            return data;
+            const response = await axios.get(url);
+            return response.data
         } catch (error) {
             console.log(error);
             return [];
@@ -28,22 +23,24 @@ export class Images {
     }
 
         incrementPage() {
-            this.#options.params.page += 1;
+            this.currentPage  += 1;
     }
 
         setFirstPage() {
-            this.#options.params.page = 1;
+            this.perPage = 40;
     }
 
         getPageNumber() {
-            return this.#options.params.page;
+            return this.currentPage;
     }
 
-        setValue(value) {
-            this.#options.params.q = value;}
-
-        getValue() {
-            return this.#options.params.q;
+    get q(){
+        return this.#Q
     }
+
+    set q(newQ){
+        this.#Q = newQ
+    }
+
 }
 

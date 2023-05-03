@@ -1,7 +1,8 @@
+import getColletion from "./getCollectiojn";
+import SimpleLightbox from "simplelightbox";
+
+const refs = getColletion()
 export function renderGallery(images) {
-    const gallery = document.querySelector('.gallery');
-    
-    gallery.innerHTML = '';
 
     const cardsMarkup = images.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
         return `
@@ -40,6 +41,13 @@ export function renderGallery(images) {
         </div>`;
     }).join('');
 
-  gallery.insertAdjacentHTML('beforeend', cardsMarkup);
-// gallery.innerHTML = cardsMarkup
+  refs.gallery.insertAdjacentHTML('beforeend', cardsMarkup);
+  lightbox.refresh()
 }
+
+const lightbox = new SimpleLightbox('.gallery a', {
+    captionSelector: 'img',
+    captionsData: 'alt',
+    captionDelay: 250,
+    preload: false,
+});

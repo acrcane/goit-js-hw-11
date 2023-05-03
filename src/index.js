@@ -1,5 +1,5 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import SimpleLightbox from 'simplelightbox';
+
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import getColletion from './js/getCollectiojn';
 import { Images } from './js/fatchImages.js';
@@ -11,20 +11,8 @@ const images = new Images();
 const refs = getColletion();
 
 refs.form.addEventListener('submit', handleSubmitForm);
-refs.imgList.addEventListener('click', handleClickImage);
-refs.loadMoreBtn.addEventListener('click', () => {
-    images.incrementPage();
-    getMoreImages();
-});
+refs.loadMoreBtn.addEventListener('click', loadImages)
 
-
-
-const lightbox = new SimpleLightbox('.gallery a', {
-    captionSelector: 'img',
-    captionsData: 'alt',
-    captionDelay: 250,
-    preload: false,
-});
 
 
 
@@ -41,73 +29,72 @@ Notify.init({
 
 
 
-function handleSubmitForm(e) {
-    e.preventDefault();
+async function handleSubmitForm(e) {
+        e.preventDefault();
 
-    images.setFirstPage();
-    const query = e.target.elements.searchQuery.value.trim();
-    console.log(query);
-    if (!query) {
-        return;
-    }
+        images.setFirstPage();
+        const query = e.target.elements.searchQuery.value.trim();
+        images.q = query;
+        console.log(query);
 
-    images.setValue(query);
-    fatchImages();
-    e.target.elements.searchQuery.value = '';
-}
+        if (!query) {
+          Notify.info('Fill the form for searching');
+            return;
+        }
 
-function fatchImages() {
-  images
-    .fetchImages()
-    .then(data => {
-      if (data.hits.length === 0) {
-        Notify.failure(
-          'Sorry, there are no images matching your search query. Please try again.'
-        );
-        refs.imgList.innerHTML = '';
-        return;
+      try{
+        const expectFetch = await images.fetchImages();
+        if(expectFetch.totalHits === 0){
+          Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+          refs.gallery.innerHTML = ''
+          return
+        }
+      Notify.success(`Hooray! We found ${expectFetch.total} images.`);
+      renderGallery(expectFetch.hits)
+      if(images.perPage * images.currentPage > expectFetch.totalHits){
+        Notify.info('We`re sorry, but you`ve reached the end of search results.');
+        refs.loadMoreBtn.classList.add('.hidden');
+        return
       }
-      renderHTML(data.hits);
-
-      if (images.getPageNumber() === 1) {
-        Notify.success(`Hooray! We found ${data.totalHits} images.`);
+      refs.loadMoreBtn.classList.remove('hidden')
+      } catch(error) {
+        console.log(error.message);
       }
 
-      lightbox.refresh();
-      images.incrementPage();
-    })
-    .catch(err => {
-      console.log(err);
-    });
 }
 
 
-function handleClickImage(e) {
-  if (e.target.nodeName === 'IMG') {
-    lightbox.on('show.simplelightbox');
-  }
-}
-
-function renderHTML(data, append = false) {
-    refs.imgList.innerHTML = ''
-    const imgGallety = renderGallery(data);
-    if(append){
-      refs.imgList.insertAdjacentHTML('beforeend', imgGallety)
-    } else {
-      refs.imgList.innerHTML = imgGallety
-    }
-}
-
-async function getMoreImages() {
-  try {
+async function loadImages(){
     images.incrementPage();
-    const data = await images.fetchImages();
-    if (data.hits.length > 0) {
-      renderHTML(data.hits, true);
-    } else {
-      console.log('No more images');
+
+    try {
+        const expectFetch = await images.fetchImages();
+
+        renderGallery(expectFetch.hits)
+
+        if(images.perPage * images.currentPage > expectFetch.totalHits){
+          showMessage('end')
+          refs.loadMoreBtn.classList.add('.hidden');
+          return
+        }
+    } catch(error){
+        console.log(error.message);
     }
-  } catch (error) {
-    console.error('Error fetching images:', error);
-  }
+}
+
+
+function showMessage(msg) {
+    switch(msg){
+      case 'failure':
+        Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+      break;
+      case 'end':
+        Notify.info('We`re sorry, but you`ve reached the end of search results.')
+      break;
+      case 'empty':
+        Notify.info('Fill the form for searching')
+      break;
+      default:
+        console.log('Something wrong');
+    }
 }

@@ -37,9 +37,31 @@
   padding: 10px;
 }
 
+input {
+  padding: 10px 5px;
+  border-radius: 30px;
+  width: 200px;
+  border: none;
+  outline: none;
+}
+
+button {
+  padding: 10px 5px;
+  border-radius: 30px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.load-more {
+  text-align: center;
+  margin: 30px auto;
+  background-color: #0b64e0;
+  color: #ffffff;
+}
+
 img {
   display: block;
-  width: 100%;
   height: auto;
   max-width: 100%;
 }
@@ -110,4 +132,8 @@ img {
 .info__quantity {
   font-size: 11px;
   line-height: 1;
+}
+
+.hidden {
+  display: none;
 }/*# sourceMappingURL=index.css.map */

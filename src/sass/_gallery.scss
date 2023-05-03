@@ -1,6 +1,5 @@
 img {
     display: block;
-    width: 100%;
     height: auto;
     max-width: 100%;
 }
@@ -75,4 +74,7 @@ img {
 .info__quantity {
     font-size: 11px;
     line-height: 1;
+}
+.hidden{
+    display: none;
 }
