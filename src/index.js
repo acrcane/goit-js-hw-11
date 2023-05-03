@@ -1,5 +1,4 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import getColletion from './js/getCollectiojn';
 import { Images } from './js/fatchImages.js';
@@ -14,7 +13,7 @@ refs.form.addEventListener('submit', handleSubmitForm);
 refs.loadMoreBtn.addEventListener('click', loadImages)
 
 
-
+refs.loadMoreBtn.classList.add('.hidden')
 
 Notify.init({
     width: '300px',
@@ -39,14 +38,15 @@ async function handleSubmitForm(e) {
 
         if (!query) {
           Notify.info('Fill the form for searching');
+          clearAll()
             return;
         }
-
+        clearAll()
       try{
         const expectFetch = await images.fetchImages();
         if(expectFetch.totalHits === 0){
           Notify.failure('Sorry, there are no images matching your search query. Please try again.');
-          refs.gallery.innerHTML = ''
+          clearAll()
           return
         }
       Notify.success(`Hooray! We found ${expectFetch.total} images.`);
@@ -83,18 +83,8 @@ async function loadImages(){
 }
 
 
-function showMessage(msg) {
-    switch(msg){
-      case 'failure':
-        Notify.failure('Sorry, there are no images matching your search query. Please try again.');
-      break;
-      case 'end':
-        Notify.info('We`re sorry, but you`ve reached the end of search results.')
-      break;
-      case 'empty':
-        Notify.info('Fill the form for searching')
-      break;
-      default:
-        console.log('Something wrong');
-    }
+
+
+function clearAll(){
+    refs.gallery.innerHTML = ''
 }

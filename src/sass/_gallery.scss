@@ -14,6 +14,7 @@ img {
 
 .gallery__item {
     max-width: 450px;
+    height: auto;
 }
 
 
@@ -23,7 +24,7 @@ img {
   
 .pictures__link, .info {
     opacity: 1;
-    transition: opacity 0.3s ease-in-out;
+    // transition: opacity 0.3s ease-in-out;
 }
   
 .pictures__img {
@@ -77,4 +78,11 @@ img {
 }
 .hidden{
     display: none;
+}
+
+.btn-container {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
 }
