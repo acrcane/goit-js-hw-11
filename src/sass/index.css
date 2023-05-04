@@ -58,6 +58,7 @@ button {
 
 .load-more {
   background-color: #0b64e0;
+  background: linear-gradient(to top, #000000, rgba(0, 0, 0, 0.2941176471));
   color: #ffffff;
 }
 

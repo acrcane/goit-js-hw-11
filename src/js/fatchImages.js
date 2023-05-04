@@ -27,6 +27,7 @@ export class Images {
     }
 
         setFirstPage() {
+            this.currentPage = 1;
             this.perPage = 40;
     }
 
