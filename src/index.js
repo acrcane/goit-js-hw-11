@@ -13,7 +13,7 @@ refs.form.addEventListener('submit', handleSubmitForm);
 refs.loadMoreBtn.addEventListener('click', loadImages)
 
 
-refs.loadMoreBtn.classList.add('.hidden')
+refs.loadMoreBtn.classList.add('hidden')
 
 Notify.init({
     width: '300px',
@@ -48,16 +48,17 @@ async function handleSubmitForm(e) {
         if(expectFetch.totalHits === 0){
           Notify.failure('Sorry, there are no images matching your search query. Please try again.');
           clearAll()
+          refs.loadMoreBtn.classList.add('hidden');
           return
         }
       Notify.success(`Hooray! We found ${expectFetch.total} images.`);
       renderGallery(expectFetch.hits)
       if(images.perPage * images.currentPage > expectFetch.totalHits){
         Notify.info('We`re sorry, but you`ve reached the end of search results.');
-        refs.loadMoreBtn.classList.add('.hidden');
+        refs.loadMoreBtn.classList.add('hidden');
         return
       }
-      refs.loadMoreBtn.classList.remove('hidden')
+      refs.loadMoreBtn.classList.remove('hidden');
       } catch(error) {
         console.log(error.message);
       }

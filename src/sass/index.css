@@ -26,11 +26,14 @@
 }
 
 .header {
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  width: 100%;
   display: flex;
   justify-content: center;
-  background-color: #0b64e0;
+  background-image: linear-gradient(to bottom, #000000, rgba(0, 0, 0, 0));
   padding: 20px;
-  margin-bottom: 20px;
 }
 
 .search-form {
@@ -38,7 +41,7 @@
 }
 
 input {
-  padding: 10px 5px;
+  padding: 10px 15px;
   border-radius: 30px;
   width: 200px;
   border: none;
@@ -60,25 +63,29 @@ button {
 
 img {
   display: block;
-  height: auto;
+  min-height: 100%;
   max-width: 100%;
 }
 
 .gallery {
   display: flex;
+  justify-content: center;
   gap: 10px;
-  max-width: 1400px;
-  margin: 0 auto;
+  width: 100%;
+  margin-top: 100px;
   flex-wrap: wrap;
 }
 
 .gallery__item {
-  max-width: 450px;
-  height: auto;
+  width: 32%;
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
 }
 
 .pictures__img-wrap {
   position: relative;
+  height: 100%;
 }
 
 .pictures__link, .info {
@@ -89,8 +96,8 @@ img {
   display: block;
   max-width: 100%;
   height: auto;
-  -o-object-fit: contain;
-     object-fit: contain;
+  -o-object-fit: cover;
+     object-fit: cover;
   -o-object-position: center;
      object-position: center;
   border-radius: 10px;
@@ -103,28 +110,32 @@ img {
   bottom: 0;
   width: 100%;
   height: 50px;
+  opacity: 1;
   display: flex;
   justify-content: center;
-  align-items: flex-end;
-  opacity: 1;
+  align-items: center;
   background: rgba(0, 0, 0, 0.5);
   border-radius: 0 0 10px 10px;
   color: white;
 }
 
 .info__list {
-  padding-bottom: 10px;
+  width: -moz-max-content;
+  width: max-content;
   display: flex;
+  justify-content: space-between;
   gap: 10px;
+  padding-left: 0;
 }
 
 .info__item {
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
 .info__icon {
-  fill: #000;
+  fill: #fff;
 }
 
 .info__quantity {

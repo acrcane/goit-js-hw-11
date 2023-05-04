@@ -1,6 +1,8 @@
 import getColletion from "./getCollectiojn";
 import SimpleLightbox from "simplelightbox";
 
+import iconSvg from '../images/symbol-defs.svg'
+
 const refs = getColletion()
 export function renderGallery(images) {
 
@@ -13,27 +15,27 @@ export function renderGallery(images) {
                 <ul class='info__list'>
                 <li class='info__item'>
                     <svg class='info__icon info-icon-like' width='15' height='15'>
-                    <use href='./images/symbol-defs.svg#icon-like'></use>
+                    <use href='${iconSvg}#icon-like'></use>
                     </svg>
-                    <span class='info__quantity'>${likes}</span>
+                    <p class='info__quantity'>${likes}</p>
                 </li>
                 <li class='info__item'>
                     <svg class='info__icon info-icon-view' width='15' height='15'>
-                    <use href='./images/symbol-defs.svg#icon-like'></use>
+                    <use href='${iconSvg}#icon-tv'></use>
                     </svg>
-                    <span class='info__quantity'>${views}</span>
+                    <p class='info__quantity'>${views}</p>
                 </li>
                 <li class='info__item'>
                     <svg class='info__icon info-icon-comment' width='15' height='15'>
-                    <use href='./images/symbol-defs.svg#icon-like'></use>
+                    <use href='${iconSvg}#icon-bubble'></use>
                     </svg>
-                    <span class='info__quantity'>${comments}</span>
+                    <p class='info__quantity'>${comments}</p>
                 </li>
                 <li class='info__item'>
                     <svg class='info__icon info-icon-download' width='15' height='15'>
-                    <use href='./images/symbol-defs.svg#icon-like'></use>
+                    <use href='${iconSvg}#icon-download'></use>
                     </svg>
-                    <span class='info__quantity'>${downloads}</span>
+                    <p class='info__quantity'>${downloads}</p>
                  </li>
                 </ul>
             </div>
