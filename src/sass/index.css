@@ -90,7 +90,12 @@ img {
 }
 
 .pictures__link, .info {
+  transition: all 300ms ease-in-out;
+}
+
+.pictures__link:hover, .info:hover {
   opacity: 1;
+  transform: scale(1.02);
 }
 
 .pictures__img {
